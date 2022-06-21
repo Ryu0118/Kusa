@@ -55,5 +55,4 @@ git_push: $(SOURCE_FILE)
 .PHONY: clean
 clean:
 	rm -rf ./target
-	rm kusa
-	rm *.gz
+	rm -rf ./release
