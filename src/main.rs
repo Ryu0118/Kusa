@@ -154,11 +154,11 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
         let previous_month = kusa[0][index - 1].get_month();
 
         if month != previous_month {
-            let whitespace_count = index * 2;
-            let current = month_line.len();
-            let require_space = whitespace_count - current;
+            let require_width = index * 2;
+            let current_width = month_line.len();
+            let require_space = require_width - current_width;
             if require_space > 0 {
-                let adjustment = " ".repeat(whitespace_count - current);
+                let adjustment = " ".repeat(require_space);
                 month_line += &adjustment;
                 month_line += months[month - 1];
             }
