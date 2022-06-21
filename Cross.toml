@@ -1,5 +1,5 @@
 [target.aarch64-unknown-linux-gnu]
-dockerfile = "./Dockerfiles/aarch64-unknown-linux-gnu/Dockerfile"
+dockerfile = "./Dockerfiles/aarch64-unknown-linux-musl/Dockerfile"
 
 [target.x86_64-unknown-linux-gnu]
-dockerfile = "./Dockerfiles/x86_64-unknown-linux-gnu/Dockerfile"
+dockerfile = "./Dockerfiles/x86_64-unknown-linux-musl/Dockerfile"

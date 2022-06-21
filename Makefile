@@ -7,12 +7,12 @@ release_mac_universal: $(SOURCE_FILE)
 	tar acvf release/kusa_mac_universal.tar.gz release/kusa
 
 release_linux: $(SOURCE_FILE)
-	cross build --release --target aarch64-unknown-linux-gnu
-	cross build --release --target x86_64-unknown-linux-gnu
-	cp ./target/aarch64-unknown-linux-gnu/release/kusa kusa
+	cross build --release --target aarch64-unknown-linux-musl
+	cross build --release --target x86_64-unknown-linux-musl
+	cp ./target/aarch64-unknown-linux-musl/release/kusa kusa
 	tar acvf release/kusa_aarch64_linux.tar.gz kusa
 	rm kusa
-	cp ./target/x86_64-unknown-linux-gnu/release/kusa kusa
+	cp ./target/x86_64-unknown-linux-musl/release/kusa kusa
 	tar acvf release/kusa_x86_64_linux.tar.gz kusa
 	rm kusa
 
