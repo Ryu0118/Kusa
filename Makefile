@@ -1,29 +1,31 @@
 SOURCE_FILE = ./src/main.rs
 
+VERSION = 0.0.1
+
 release_mac_universal: $(SOURCE_FILE)
 	cargo build --release --target aarch64-apple-darwin
 	cargo build --release --target x86_64-apple-darwin
 	lipo -create -output ./release/kusa ./target/aarch64-apple-darwin/release/kusa ./target/x86_64-apple-darwin/release/kusa
-	tar acvf release/kusa_mac_universal.tar.gz release/kusa
+	tar acvf release/kusa_$(VERSION)_mac_universal.tar.gz release/kusa
 
 release_linux: $(SOURCE_FILE)
 	cross build --release --target aarch64-unknown-linux-musl
 	cross build --release --target x86_64-unknown-linux-musl
 	cp ./target/aarch64-unknown-linux-musl/release/kusa kusa
-	tar acvf release/kusa_aarch64_linux.tar.gz kusa
+	tar acvf release/kusa_$(VERSION)_aarch64_linux.tar.gz kusa
 	rm kusa
 	cp ./target/x86_64-unknown-linux-musl/release/kusa kusa
-	tar acvf release/kusa_x86_64_linux.tar.gz kusa
+	tar acvf release/kusa_$(VERSION)_x86_64_linux.tar.gz kusa
 	rm kusa
 
 release_windows: $(SOURCE_FILE)
 	cross build --release --target x86_64-pc-windows-gnu
 	cross build --release --target i686-pc-windows-gnu
 	cp ./target/x86_64-pc-windows-gnu/release/kusa.exe kusa.exe
-	zip release/kusa_x86_64-windows.zip kusa.exe
+	zip release/kusa_$(VERSION)_x86_64-windows.zip kusa.exe
 	rm kusa.exe
 	cp ./target/i686-pc-windows-gnu/release/kusa.exe kusa.exe
-	zip release/kusa_i686-windows.zip kusa.exe
+	zip release/kusa_$(VERSION)_i686-windows.zip kusa.exe
 	rm kusa.exe
 
 .PHONY: release
@@ -56,3 +58,4 @@ git_push: $(SOURCE_FILE)
 clean:
 	rm -rf ./target
 	rm -rf ./release
+	rm Cargo.lock
