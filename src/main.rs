@@ -18,7 +18,7 @@ type Date = String;
 #[clap(
     name = "kusa",
     version = "0.0.1",
-    about = "Command to get a chart of the number of Github contributions",
+    about = "Command to get a chart of the number of Github contributions"
 )]
 struct Command {
     #[clap(name = "github user name", action = clap::ArgAction::Set)]
@@ -39,11 +39,7 @@ struct DailyStatus {
 
 impl DailyStatus {
     fn get_month(&self) -> usize {
-        self.date
-            .split("-")
-            .collect::<Vec<_>>()[1]
-            .parse()
-            .unwrap()
+        self.date.split("-").collect::<Vec<_>>()[1].parse().unwrap()
     }
 }
 
@@ -53,7 +49,7 @@ trait HexToRGB {
 
 impl HexToRGB for String {
     fn get_rgb(&mut self) -> RGB {
-        self.remove(0);//#ebedf0 -> ebedf0
+        self.remove(0); //#ebedf0 -> ebedf0
         let v = i64::from_str_radix(&*self, 16).unwrap() as f64;
         RGB {
             r: (v / 256_f64.powf(2.0) % 256.0) as i64,
@@ -66,28 +62,25 @@ impl HexToRGB for String {
 fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<DailyStatus>>) {
     match response_data.user {
         Some(user) => {
-            let contribution_calendar = user
-                .contributions_collection
-                .contribution_calendar;
+            let contribution_calendar = user.contributions_collection.contribution_calendar;
 
             let total_contributions = contribution_calendar.total_contributions;
 
-            let weekly_status =
-                contribution_calendar.weeks
-                    .iter()
-                    .map(|weekly_status| {
-                        weekly_status.contribution_days
-                            .iter()
-                            .map(|daily_status| {
-                                DailyStatus {
-                                    date: daily_status.date.to_string(),
-                                    contribution_count: daily_status.contribution_count,
-                                    color: daily_status.color.to_string(),
-                                }
-                            })
-                            .collect()
-                    })
-                    .collect();
+            let weekly_status = contribution_calendar
+                .weeks
+                .iter()
+                .map(|weekly_status| {
+                    weekly_status
+                        .contribution_days
+                        .iter()
+                        .map(|daily_status| DailyStatus {
+                            date: daily_status.date.to_string(),
+                            contribution_count: daily_status.contribution_count,
+                            color: daily_status.color.to_string(),
+                        })
+                        .collect()
+                })
+                .collect();
             return (total_contributions, weekly_status);
         }
         None => {
@@ -112,7 +105,7 @@ fn post_graphql_query(user_name: &str) -> Result<kusa::ResponseData> {
                 reqwest::header::HeaderValue::from_str(&format!("Bearer {}", github_access_token))
                     .unwrap(),
             ))
-                .collect(),
+            .collect(),
         )
         .build()?;
 
@@ -139,10 +132,9 @@ fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> 
 
 fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
     let months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
-    let mut month_line  = "".to_string();
+    let mut month_line = "".to_string();
     for (index, daily_status) in kusa[0].iter().enumerate() {
         if index == 0 {
             let month = daily_status.get_month();
@@ -161,14 +153,12 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
                 let adjustment = " ".repeat(require_space);
                 month_line += &adjustment;
                 month_line += months[month - 1];
-            }
-            else {
+            } else {
                 month_line.remove(3);
                 month_line += &" ".repeat(3 + require_space);
                 month_line += months[month - 1];
             }
         }
-
     }
     println!("{}", month_line);
 }
@@ -177,10 +167,7 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
         "#ebedf0", //Less
-        "#9be9a8",
-        "#40c463",
-        "#30a14e",
-        "#216e39",//More
+        "#9be9a8", "#40c463", "#30a14e", "#216e39", //More
     ];
     let whitespaces = " ".repeat(start_point);
     print!("{}", whitespaces);

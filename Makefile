@@ -1,32 +1,36 @@
-SOURCE_FILE = ./src/main.rs
+SOURCE_FILE := ./src/main.rs
 
-VERSION = 0.0.1
+VERSION := 0.0.1
+
+APP := kusa
+
+RELEASE_BUILD := cargo build --release --target
 
 release_mac_universal: $(SOURCE_FILE)
-	cargo build --release --target aarch64-apple-darwin
-	cargo build --release --target x86_64-apple-darwin
-	lipo -create -output ./release/kusa ./target/aarch64-apple-darwin/release/kusa ./target/x86_64-apple-darwin/release/kusa
-	tar acvf release/kusa_$(VERSION)_mac_universal.tar.gz release/kusa
+	$(RELEASE_BUILD) aarch64-apple-darwin
+	$(RELEASE_BUILD) x86_64-apple-darwin
+	lipo -create -output ./release/$(APP) ./target/aarch64-apple-darwin/release/$(APP) ./target/x86_64-apple-darwin/release/$(APP)
+	tar acvf release/$(APP)_$(VERSION)_mac_universal.tar.gz release/$(APP)
 
 release_linux: $(SOURCE_FILE)
-	cross build --release --target aarch64-unknown-linux-musl
-	cross build --release --target x86_64-unknown-linux-musl
-	cp ./target/aarch64-unknown-linux-musl/release/kusa kusa
-	tar acvf release/kusa_$(VERSION)_aarch64_linux.tar.gz kusa
-	rm kusa
-	cp ./target/x86_64-unknown-linux-musl/release/kusa kusa
-	tar acvf release/kusa_$(VERSION)_x86_64_linux.tar.gz kusa
-	rm kusa
+	$(RELEASE_BUILD) aarch64-unknown-linux-musl
+	$(RELEASE_BUILD) x86_64-unknown-linux-musl
+	cp ./target/aarch64-unknown-linux-musl/release/$(APP) $(APP)
+	tar acvf release/$(APP)_$(VERSION)_aarch64_linux.tar.gz $(APP)
+	rm $(APP)
+	cp ./target/x86_64-unknown-linux-musl/release/$(APP) $(APP)
+	tar acvf release/$(APP)_$(VERSION)_x86_64_linux.tar.gz $(APP)
+	rm $(APP)
 
 release_windows: $(SOURCE_FILE)
-	cross build --release --target x86_64-pc-windows-gnu
-	cross build --release --target i686-pc-windows-gnu
-	cp ./target/x86_64-pc-windows-gnu/release/kusa.exe kusa.exe
-	zip release/kusa_$(VERSION)_x86_64-windows.zip kusa.exe
-	rm kusa.exe
-	cp ./target/i686-pc-windows-gnu/release/kusa.exe kusa.exe
-	zip release/kusa_$(VERSION)_i686-windows.zip kusa.exe
-	rm kusa.exe
+	$(RELEASE_BUILD) x86_64-pc-windows-gnu
+	$(RELEASE_BUILD) i686-pc-windows-gnu
+	cp ./target/x86_64-pc-windows-gnu/release/$(APP).exe $(APP).exe
+	zip release/$(APP)_$(VERSION)_x86_64-windows.zip $(APP).exe
+	rm $(APP).exe
+	cp ./target/i686-pc-windows-gnu/release/$(APP).exe $(APP).exe
+	zip release/$(APP)_$(VERSION)_i686-windows.zip $(APP).exe
+	rm $(APP).exe
 
 .PHONY: release
 release:
@@ -53,6 +57,10 @@ git_push: $(SOURCE_FILE)
 	else \
 		echo token is included in the code; \
 	fi
+
+.PHONY: format
+format:
+	cargo fmt
 
 .PHONY: clean
 clean:
