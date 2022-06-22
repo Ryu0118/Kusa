@@ -3,6 +3,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
 use std::process;
+use ansi_term::{Style, Colour};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -25,12 +26,6 @@ struct Command {
     user_name: String,
 }
 
-struct RGB {
-    r: i64,
-    g: i64,
-    b: i64,
-}
-
 struct DailyStatus {
     date: String,
     contribution_count: i64,
@@ -44,18 +39,17 @@ impl DailyStatus {
 }
 
 trait HexToRGB {
-    fn get_rgb(&mut self) -> RGB;
+    fn get_rgb(&mut self) -> Colour;
 }
 
 impl HexToRGB for String {
-    fn get_rgb(&mut self) -> RGB {
+    fn get_rgb(&mut self) -> Colour {
         self.remove(0); //#ebedf0 -> ebedf0
         let v = i64::from_str_radix(&*self, 16).unwrap() as f64;
-        RGB {
-            r: (v / 256_f64.powf(2.0) % 256.0) as i64,
-            g: (v / 256_f64.powf(1.0) % 256.0) as i64,
-            b: (v / 256_f64.powf(0.0) % 256.0) as i64,
-        }
+        let r: u8 = (v / 256_f64.powf(2.0) % 256.0) as u8;
+        let g: u8 = (v / 256_f64.powf(1.0) % 256.0) as u8;
+        let b: u8 = (v / 256_f64.powf(0.0) % 256.0) as u8;
+        Colour::RGB(r, g, b)
     }
 }
 
@@ -167,14 +161,17 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
         "#ebedf0", //Less
-        "#9be9a8", "#40c463", "#30a14e", "#216e39", //More
+        "#9be9a8",
+        "#40c463",
+        "#30a14e",
+        "#216e39", //More
     ];
     let whitespaces = " ".repeat(start_point);
     print!("{}", whitespaces);
     print!("Less ");
     for color in colors {
-        let rgb = color.to_string().get_rgb();
-        print!("\x1b[38;2;{};{};{}m■\x1b[m ", rgb.r, rgb.g, rgb.b);
+        let block = color.to_string().get_rgb().paint("■ ");
+        print!("{}", block);
     }
     print!("More\n");
 }
@@ -182,14 +179,17 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
 fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
     for weekly_kusa in kusa {
         for daily_kusa in weekly_kusa {
-            let rgb = daily_kusa.color.to_string().get_rgb();
-            print!("\x1b[38;2;{};{};{}m■\x1b[m ", rgb.r, rgb.g, rgb.b);
+            let block = daily_kusa.color.to_string().get_rgb().paint("■ ");
+            print!("{}", block);
         }
         println!("");
     }
 }
 
 fn main() -> Result<()> {
+    #[cfg(target_os = "windows")]
+    ansi_term::enable_ansi_support();
+
     let args = Command::parse();
     let user_name = args.user_name;
 
@@ -197,7 +197,7 @@ fn main() -> Result<()> {
     let (total_contributions, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
-    println!("{} contributions in the last year", total_contributions);
+    println!("{} contributions in the last year", Style::new().bold().paint(total_contributions.to_string()));
     print_month(&kusa);
     print_kusa(&kusa);
     print_gradation(&kusa);
