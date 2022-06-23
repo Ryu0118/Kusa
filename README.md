@@ -19,7 +19,7 @@
 brew tap Ryu0118/Kusa
 brew install kusa
 ```
-or Download the appropriate file for your device from releases
+or download the appropriate file for your device from releases
 
 ## Usage
 
