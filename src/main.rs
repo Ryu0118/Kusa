@@ -202,7 +202,9 @@ fn main() -> Result<()> {
     println!("{} contributions in the last year", Style::new().bold().paint(total_contributions.to_string()));
     #[cfg(target_os = "windows")]
     print_month(&kusa);
+
     print_kusa(&kusa);
+
     #[cfg(target_os = "windows")]
     print_gradation(&kusa);
 
