@@ -13,7 +13,7 @@
 </div>
 
 ## Installation
-### Homebrew
+### Homebrew (only macOS)
 
 ```
 $ brew tap Ryu0118/Kusa
