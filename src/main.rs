@@ -19,7 +19,7 @@ type Date = String;
 #[clap(
     name = "kusa",
     version = "0.0.1",
-    about = "Command to get a chart of the number of Github contributions"
+    about = "Command to display Github Contributions graph on your shell"
 )]
 struct Command {
     #[clap(name = "github user name", action = clap::ArgAction::Set)]
