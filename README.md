@@ -21,6 +21,11 @@ $ brew install kusa
 ```
 or download the appropriate file for your device from [releases](https://github.com/Ryu0118/Kusa/releases/tag/0.0.1)
 
+To build and run Kusa in your own environment, 
+```
+$ cargo run <github user name>
+```
+
 ## Usage
 
 ### `kusa --help`
