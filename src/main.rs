@@ -124,7 +124,7 @@ fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> 
     return kusa;
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(not(target_os = "windows"))]
 fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
     let months = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -158,7 +158,7 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
     println!("{}", month_line);
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(not(target_os = "windows"))]
 fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
@@ -201,12 +201,12 @@ fn main() -> Result<()> {
 
     println!("{} contributions in the last year", Style::new().bold().paint(total_contributions.to_string()));
 
-    #[cfg(target_os = "windows")]
+    #[cfg(not(target_os = "windows"))]
     print_month(&kusa);
 
     print_kusa(&kusa);
 
-    #[cfg(target_os = "windows")]
+    #[cfg(not(target_os = "windows"))]
     print_gradation(&kusa);
 
     Ok(())
