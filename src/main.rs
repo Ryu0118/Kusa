@@ -200,6 +200,7 @@ fn main() -> Result<()> {
     let kusa = transpose(&weekly_statuses);
 
     println!("{} contributions in the last year", Style::new().bold().paint(total_contributions.to_string()));
+
     #[cfg(target_os = "windows")]
     print_month(&kusa);
 
