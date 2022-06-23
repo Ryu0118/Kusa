@@ -172,8 +172,11 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
     print!("{}", whitespaces);
     print!("Less ");
     for color in colors {
-        let block = color.to_string().get_rgb().paint("■ ");
-        print!("{}", block);
+        color
+            .to_string()
+            .get_rgb()
+            .paint("■ ".as_bytes())
+            .write_to(&mut std::io::stdout()).unwrap();
     }
     print!("More\n");
 }
@@ -181,8 +184,11 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
 fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
     for weekly_kusa in kusa {
         for daily_kusa in weekly_kusa {
-            let block = daily_kusa.color.to_string().get_rgb().paint("■ ");
-            print!("{}", block);
+            daily_kusa.color
+                .to_string()
+                .get_rgb()
+                .paint("■ ".as_bytes())
+                .write_to(&mut std::io::stdout()).unwrap();
         }
         println!("");
     }
