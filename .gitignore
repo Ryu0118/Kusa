@@ -5,3 +5,4 @@ kusa_mac_universal.tar.gz
 /.github
 /Cargo.lock
 /release
+default.profraw
