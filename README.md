@@ -22,10 +22,15 @@ $ brew install kusa
 or download the appropriate file for your device from [releases](https://github.com/Ryu0118/Kusa/releases/tag/0.0.2)
 
 To build and run Kusa in your own environment, 
-Put your Github Personal Access Token with "read:user" enabled in "GITHUB_ACCESS_TOKEN" then run this
+Put your Github Personal Access Token with "read:user" enabled in "GITHUB_ACCESS_TOKEN" (src/main.rs, line 88)
+```Rust
+let github_access_token = "GITHUB_ACCESS_TOKEN";
+```
+then run this
 ```
 $ cargo run <github user name>
 ```
+
 
 ## known issue
 Terminal.app on macOS does not support 24-bit color, so colors are not displayed.
