@@ -19,7 +19,7 @@
 $ brew tap Ryu0118/Kusa
 $ brew install kusa
 ```
-or download the appropriate file for your device from [releases](https://github.com/Ryu0118/Kusa/releases/tag/0.0.1)
+or download the appropriate file for your device from [releases](https://github.com/Ryu0118/Kusa/releases/tag/0.0.2)
 
 To build and run Kusa in your own environment, 
 Put your Github Personal Access Token with "read:user" enabled in "GITHUB_ACCESS_TOKEN" then run this
