@@ -18,7 +18,7 @@ type Date = String;
 #[derive(Parser)]
 #[clap(
     name = "kusa",
-    version = "0.0.1",
+    version = "0.0.2",
     about = "Command to display Github Contributions graph on your shell"
 )]
 struct Command {

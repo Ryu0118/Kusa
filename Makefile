@@ -1,6 +1,6 @@
 SOURCE_FILE := ./src/main.rs
 
-VERSION := 0.0.1
+VERSION := 0.0.2
 
 APP := kusa
 
