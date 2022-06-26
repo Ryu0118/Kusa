@@ -79,7 +79,7 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
                         .collect()
                 })
                 .collect();
-            return (total_contributions, weekly_status);
+            (total_contributions, weekly_status)
         }
         None => {
             println!("No users found");
@@ -125,7 +125,7 @@ fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> 
         }
         kusa.push(row);
     }
-    return kusa;
+    kusa
 }
 
 #[cfg(not(target_os = "windows"))]
