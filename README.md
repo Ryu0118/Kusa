@@ -3,7 +3,7 @@
 <div align="center">  
   <img alt="image" src="https://user-images.githubusercontent.com/87907656/174868343-f9ac7940-c49f-47fb-8f9d-a48ece0fc907.png">
   
-  #### Kusa is a command that displays the Github Contributions Graph.
+  #### Kusa is a cli tool that displays the Github Contributions Graph.
   
   ![Language:Rust](https://img.shields.io/static/v1?label=Language&message=Rust&color=green&style=flat-square)
   ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
