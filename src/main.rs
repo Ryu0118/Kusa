@@ -43,13 +43,13 @@ impl DailyStatus {
 }
 
 trait HexToRGB {
-    fn get_rgb(&mut self) -> Colour;
+    fn get_rgb(&self) -> Colour;
 }
 
-impl HexToRGB for String {
-    fn get_rgb(&mut self) -> Colour {
-        self.remove(0); //#ebedf0 -> ebedf0
-        let v = i64::from_str_radix(&*self, 16).unwrap() as f64;
+impl HexToRGB for str {
+    fn get_rgb(&self) -> Colour {
+        // #ebedf0 -> ebedf0
+        let v = i64::from_str_radix(&self[1..], 16).unwrap() as f64;
         let r: u8 = (v / 256_f64.powf(2.0) % 256.0) as u8;
         let g: u8 = (v / 256_f64.powf(1.0) % 256.0) as u8;
         let b: u8 = (v / 256_f64.powf(0.0) % 256.0) as u8;
@@ -178,7 +178,6 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
     print!("Less ");
     for color in colors {
         color
-            .to_string()
             .get_rgb()
             .paint("■ ".as_bytes())
             .write_to(&mut std::io::stdout()).unwrap();
@@ -190,7 +189,6 @@ fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
     for weekly_kusa in kusa {
         for daily_kusa in weekly_kusa {
             daily_kusa.color
-                .to_string()
                 .get_rgb()
                 .paint("■ ".as_bytes())
                 .write_to(&mut std::io::stdout()).unwrap();
