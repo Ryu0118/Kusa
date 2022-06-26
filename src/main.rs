@@ -88,11 +88,11 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
     }
 }
 
-fn post_graphql_query(user_name: &str) -> Result<kusa::ResponseData> {
+fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
     let github_access_token = "GITHUB_ACCESS_TOKEN";
 
     let variables = kusa::Variables {
-        user_name: user_name.to_string(),
+        user_name,
     };
 
     let client = Client::builder()
@@ -201,9 +201,8 @@ fn main() -> Result<()> {
     ansi_term::enable_ansi_support();
 
     let args = Command::parse();
-    let user_name = args.user_name;
 
-    let data = post_graphql_query(&user_name)?;
+    let data = post_graphql_query(args.user_name)?;
     let (total_contributions, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
