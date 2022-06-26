@@ -113,7 +113,7 @@ fn post_graphql_query(user_name: &str) -> Result<kusa::ResponseData> {
     response_body.data.context("failed to fetch data")
 }
 
-fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> {
+fn transpose(weekly_statuses: &[Vec<DailyStatus>]) -> Vec<Vec<&DailyStatus>> {
     let week_count = weekly_statuses.len();
     let mut kusa: Vec<Vec<&DailyStatus>> = Vec::new();
     for column_index in 0..7 {
@@ -129,7 +129,7 @@ fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> 
 }
 
 #[cfg(not(target_os = "windows"))]
-fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
+fn print_month(kusa: &[Vec<&DailyStatus>]) {
     let months = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
@@ -164,7 +164,7 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
 }
 
 #[cfg(not(target_os = "windows"))]
-fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
+fn print_gradation(kusa: &[Vec<&DailyStatus>]) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
         "#ebedf0", //Less
