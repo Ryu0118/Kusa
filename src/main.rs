@@ -118,8 +118,8 @@ fn transpose(weekly_statuses: &[Vec<DailyStatus>]) -> Vec<Vec<&DailyStatus>> {
     let mut kusa: Vec<Vec<&DailyStatus>> = Vec::new();
     for column_index in 0..7 {
         let mut row = Vec::new();
-        for row_index in 0..week_count {
-            if let Some(contribution) = weekly_statuses[row_index].get(column_index) {
+        for weekly_status in weekly_statuses.iter().take(week_count) {
+            if let Some(contribution) = weekly_status.get(column_index) {
                 row.push(contribution);
             }
         }
