@@ -34,7 +34,11 @@ struct DailyStatus {
 
 impl DailyStatus {
     fn get_month(&self) -> usize {
-        self.date.split("-").collect::<Vec<_>>()[1].parse().unwrap()
+        self.date
+            .split('-')
+            .nth(1)
+            .and_then(|m| m.parse().ok())
+            .unwrap()
     }
 }
 
