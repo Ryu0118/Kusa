@@ -154,7 +154,7 @@ fn print_month(kusa: &[Vec<&DailyStatus>]) {
                 month_line += months[month - 1];
             } else {
                 let adjustment_space = 3 + require_space;
-                month_line = "".to_string();
+                month_line.clear();
                 month_line += &" ".repeat(adjustment_space as usize);
                 month_line += months[month - 1];
             }
