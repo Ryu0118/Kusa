@@ -1,9 +1,9 @@
 use ::reqwest::blocking::Client;
+use ansi_term::{Colour, Style};
 use anyhow::{Context, Result};
 use clap::Parser;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
 use std::process;
-use ansi_term::{Style, Colour};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -91,9 +91,7 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
 fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
     let github_access_token = "GITHUB_ACCESS_TOKEN";
 
-    let variables = kusa::Variables {
-        user_name,
-    };
+    let variables = kusa::Variables { user_name };
 
     let client = Client::builder()
         .user_agent("graphql-rust/0.10.0")
@@ -168,10 +166,7 @@ fn print_gradation(kusa: &[Vec<&DailyStatus>]) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
         "#ebedf0", //Less
-        "#9be9a8",
-        "#40c463",
-        "#30a14e",
-        "#216e39", //More
+        "#9be9a8", "#40c463", "#30a14e", "#216e39", //More
     ];
     let whitespaces = " ".repeat(start_point);
     print!("{}Less ", whitespaces);
@@ -179,7 +174,8 @@ fn print_gradation(kusa: &[Vec<&DailyStatus>]) {
         color
             .get_rgb()
             .paint("■ ".as_bytes())
-            .write_to(&mut std::io::stdout()).unwrap();
+            .write_to(&mut std::io::stdout())
+            .unwrap();
     }
     println!("More");
 }
@@ -187,10 +183,12 @@ fn print_gradation(kusa: &[Vec<&DailyStatus>]) {
 fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
     for weekly_kusa in kusa {
         for daily_kusa in weekly_kusa {
-            daily_kusa.color
+            daily_kusa
+                .color
                 .get_rgb()
                 .paint("■ ".as_bytes())
-                .write_to(&mut std::io::stdout()).unwrap();
+                .write_to(&mut std::io::stdout())
+                .unwrap();
         }
         println!();
     }
@@ -206,7 +204,10 @@ fn main() -> Result<()> {
     let (total_contributions, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
-    println!("{} contributions in the last year", Style::new().bold().paint(total_contributions.to_string()));
+    println!(
+        "{} contributions in the last year",
+        Style::new().bold().paint(total_contributions.to_string())
+    );
 
     #[cfg(not(target_os = "windows"))]
     print_month(&kusa);
