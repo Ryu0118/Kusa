@@ -34,18 +34,22 @@ struct DailyStatus {
 
 impl DailyStatus {
     fn get_month(&self) -> usize {
-        self.date.split("-").collect::<Vec<_>>()[1].parse().unwrap()
+        self.date
+            .split('-')
+            .nth(1)
+            .and_then(|m| m.parse().ok())
+            .unwrap()
     }
 }
 
 trait HexToRGB {
-    fn get_rgb(&mut self) -> Colour;
+    fn get_rgb(&self) -> Colour;
 }
 
-impl HexToRGB for String {
-    fn get_rgb(&mut self) -> Colour {
-        self.remove(0); //#ebedf0 -> ebedf0
-        let v = i64::from_str_radix(&*self, 16).unwrap() as f64;
+impl HexToRGB for str {
+    fn get_rgb(&self) -> Colour {
+        // #ebedf0 -> ebedf0
+        let v = i64::from_str_radix(&self[1..], 16).unwrap() as f64;
         let r: u8 = (v / 256_f64.powf(2.0) % 256.0) as u8;
         let g: u8 = (v / 256_f64.powf(1.0) % 256.0) as u8;
         let b: u8 = (v / 256_f64.powf(0.0) % 256.0) as u8;
@@ -75,7 +79,7 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
                         .collect()
                 })
                 .collect();
-            return (total_contributions, weekly_status);
+            (total_contributions, weekly_status)
         }
         None => {
             println!("No users found");
@@ -84,11 +88,11 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
     }
 }
 
-fn post_graphql_query(user_name: &str) -> Result<kusa::ResponseData> {
+fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
     let github_access_token = "GITHUB_ACCESS_TOKEN";
 
     let variables = kusa::Variables {
-        user_name: user_name.to_string(),
+        user_name,
     };
 
     let client = Client::builder()
@@ -109,23 +113,23 @@ fn post_graphql_query(user_name: &str) -> Result<kusa::ResponseData> {
     response_body.data.context("failed to fetch data")
 }
 
-fn transpose(weekly_statuses: &Vec<Vec<DailyStatus>>) -> Vec<Vec<&DailyStatus>> {
+fn transpose(weekly_statuses: &[Vec<DailyStatus>]) -> Vec<Vec<&DailyStatus>> {
     let week_count = weekly_statuses.len();
     let mut kusa: Vec<Vec<&DailyStatus>> = Vec::new();
     for column_index in 0..7 {
         let mut row = Vec::new();
-        for row_index in 0..week_count {
-            if let Some(contribution) = weekly_statuses[row_index].get(column_index) {
+        for weekly_status in weekly_statuses.iter().take(week_count) {
+            if let Some(contribution) = weekly_status.get(column_index) {
                 row.push(contribution);
             }
         }
         kusa.push(row);
     }
-    return kusa;
+    kusa
 }
 
 #[cfg(not(target_os = "windows"))]
-fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
+fn print_month(kusa: &[Vec<&DailyStatus>]) {
     let months = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
@@ -150,7 +154,7 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
                 month_line += months[month - 1];
             } else {
                 let adjustment_space = 3 + require_space;
-                month_line = "".to_string();
+                month_line.clear();
                 month_line += &" ".repeat(adjustment_space as usize);
                 month_line += months[month - 1];
             }
@@ -160,7 +164,7 @@ fn print_month(kusa: &Vec<Vec<&DailyStatus>>) {
 }
 
 #[cfg(not(target_os = "windows"))]
-fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
+fn print_gradation(kusa: &[Vec<&DailyStatus>]) {
     let start_point = (kusa[6].len()) * 2 - 18;
     let colors = [
         "#ebedf0", //Less
@@ -170,28 +174,25 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
         "#216e39", //More
     ];
     let whitespaces = " ".repeat(start_point);
-    print!("{}", whitespaces);
-    print!("Less ");
+    print!("{}Less ", whitespaces);
     for color in colors {
         color
-            .to_string()
             .get_rgb()
             .paint("■ ".as_bytes())
             .write_to(&mut std::io::stdout()).unwrap();
     }
-    print!("More\n");
+    println!("More");
 }
 
 fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
     for weekly_kusa in kusa {
         for daily_kusa in weekly_kusa {
             daily_kusa.color
-                .to_string()
                 .get_rgb()
                 .paint("■ ".as_bytes())
                 .write_to(&mut std::io::stdout()).unwrap();
         }
-        println!("");
+        println!();
     }
 }
 
@@ -200,9 +201,8 @@ fn main() -> Result<()> {
     ansi_term::enable_ansi_support();
 
     let args = Command::parse();
-    let user_name = args.user_name;
 
-    let data = post_graphql_query(&user_name)?;
+    let data = post_graphql_query(args.user_name)?;
     let (total_contributions, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
