@@ -174,15 +174,14 @@ fn print_gradation(kusa: &Vec<Vec<&DailyStatus>>) {
         "#216e39", //More
     ];
     let whitespaces = " ".repeat(start_point);
-    print!("{}", whitespaces);
-    print!("Less ");
+    print!("{}Less ", whitespaces);
     for color in colors {
         color
             .get_rgb()
             .paint("■ ".as_bytes())
             .write_to(&mut std::io::stdout()).unwrap();
     }
-    print!("More\n");
+    println!("More");
 }
 
 fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
@@ -193,7 +192,7 @@ fn print_kusa(kusa: &Vec<Vec<&DailyStatus>>) {
                 .paint("■ ".as_bytes())
                 .write_to(&mut std::io::stdout()).unwrap();
         }
-        println!("");
+        println!();
     }
 }
 
