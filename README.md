@@ -32,7 +32,7 @@ $ cargo run <github user name>
 ```
 
 
-## known issue
+## Known issue
 Terminal.app on macOS does not support 24-bit color, so colors are not displayed.
 Therefore, use iTerm2, Hyper, Warp or other terminals to display colors correctly.
 
