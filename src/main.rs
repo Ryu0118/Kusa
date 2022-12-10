@@ -5,12 +5,17 @@ use clap::Parser;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
 use std::process;
 
+//////////////////////////////////////////////////////////
+static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
+//////////////////////////////////////////////////////////
+
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "schema.graphql",
     query_path = "query.graphql",
     response_derives = "Debug"
 )]
+
 struct Kusa;
 
 type Date = String;
@@ -21,6 +26,7 @@ type Date = String;
     version = "0.0.2",
     about = "Command to display Github Contributions graph on your shell"
 )]
+
 struct Command {
     #[clap(name = "github user name", action = clap::ArgAction::Set)]
     user_name: String,
@@ -28,7 +34,6 @@ struct Command {
 
 struct DailyStatus {
     date: String,
-    contribution_count: i64,
     color: String,
 }
 
@@ -73,7 +78,6 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
                         .iter()
                         .map(|daily_status| DailyStatus {
                             date: daily_status.date.to_string(),
-                            contribution_count: daily_status.contribution_count,
                             color: daily_status.color.to_string(),
                         })
                         .collect()
@@ -89,7 +93,6 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
 }
 
 fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
-    let github_access_token = "GITHUB_ACCESS_TOKEN";
 
     let variables = kusa::Variables { user_name };
 
@@ -98,7 +101,7 @@ fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
         .default_headers(
             std::iter::once((
                 reqwest::header::AUTHORIZATION,
-                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", github_access_token))
+                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", GITHUB_ACCESS_TOKEN))
                     .unwrap(),
             ))
             .collect(),
