@@ -6,7 +6,7 @@ use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuer
 use std::process;
 
 //////////////////////////////////////////////////////////
-static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
+static GITHUB_ACCESS_TOKEN: &str = "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";
 //////////////////////////////////////////////////////////
 
 #[derive(GraphQLQuery)]
@@ -24,7 +24,7 @@ type Date = String;
 #[clap(
     name = "kusa",
     version = "0.0.2",
-    about = "Command to display Github Contributions graph on your shell"
+    about = "A simple CLI which displays GitHub contribution graphs right from the comfort of your shell"
 )]
 
 struct Command {
@@ -93,7 +93,6 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
 }
 
 fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
-
     let variables = kusa::Variables { user_name };
 
     let client = Client::builder()

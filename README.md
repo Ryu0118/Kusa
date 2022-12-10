@@ -1,9 +1,7 @@
-
-
 <div align="center">  
   <img alt="image" src="https://user-images.githubusercontent.com/87907656/174868343-f9ac7940-c49f-47fb-8f9d-a48ece0fc907.png">
   
-  #### Kusa is a cli tool that displays the Github Contributions Graph.
+  #### Kusa is a simple CLI which displays GitHub contribution graphs right from the comfort of your shell
   
   ![Language:Rust](https://img.shields.io/static/v1?label=Language&message=Rust&color=green&style=flat-square)
   ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
@@ -15,7 +13,7 @@
 ## Installation
 ### Homebrew (only macOS)
 
-```
+```sh
 $ brew tap Ryu0118/Kusa
 $ brew install kusa
 ```
@@ -23,17 +21,20 @@ or download the appropriate file for your device from [releases](https://github.
 
 ### Building From Source
 
-To build and run Kusa in your own environment, 
-Put your Github Personal Access Token with "read:user" enabled in "GITHUB_ACCESS_TOKEN" (src/main.rs, line 9)
-```Rust
+To build and run Kusa on your machine put your GitHub Personal Access Token with
+"read:user" enabled in "GITHUB_ACCESS_TOKEN" (src/main.rs, line 9)
+
+```sh
 static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
 ```
 then run this
-```
+
+```sh
 $ cargo run <github user name>
 ```
 
 ## How To Generate A Github Access Token
+
 Go to [github developer settings](https://github.com/settings/tokens).
 
 Set the expiration date to "No Expiration".
@@ -42,13 +43,15 @@ No scopes are required for this application.
 
 Click "Generate Token" and then copy the token it generates.
 
-## Known Issue
-Terminal.app on macOS does not support 24-bit color, so colors are not displayed.
-Therefore, use iTerm2, Hyper, Warp or other terminals to display colors correctly.
+## Known Issues
+
+- Terminal.app on macOS does not support 24-bit color, so colors are not displayed,
+therefore, use iTerm2, Hyper, Warp or other terminals to display colors correctly.
 
 ## Usage
 
 ### `kusa --help`
+
 ```
 USAGE:
     kusa <github user name>
