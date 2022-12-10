@@ -4,10 +4,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
 use std::process;
-
-//////////////////////////////////////////////////////////
-static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
-//////////////////////////////////////////////////////////
+use std::env;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -92,7 +89,7 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
     }
 }
 
-fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
+fn post_graphql_query(user_name: String, token: String) -> Result<kusa::ResponseData> {
 
     let variables = kusa::Variables { user_name };
 
@@ -101,7 +98,7 @@ fn post_graphql_query(user_name: String) -> Result<kusa::ResponseData> {
         .default_headers(
             std::iter::once((
                 reqwest::header::AUTHORIZATION,
-                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", GITHUB_ACCESS_TOKEN))
+                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", token))
                     .unwrap(),
             ))
             .collect(),
@@ -203,7 +200,9 @@ fn main() -> Result<()> {
 
     let args = Command::parse();
 
-    let data = post_graphql_query(args.user_name)?;
+    let token = env::var("GITHUB_TOKEN").unwrap();
+
+    let data = post_graphql_query(args.user_name,token)?;
     let (total_contributions, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 

@@ -24,13 +24,18 @@ or download the appropriate file for your device from [releases](https://github.
 ### Building From Source
 
 To build and run Kusa in your own environment, 
-Put your Github Personal Access Token with "read:user" enabled in "GITHUB_ACCESS_TOKEN" (src/main.rs, line 9)
-```Rust
-static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
+Assign your Github Personal Access Token with "read:user" in environment variable as
+```Bash
+GITHUB_TOKEN="<your_github_token>"
 ```
 then run this
+
+```Rust
+$ cargo run <github_user_name>
 ```
-$ cargo run <github user name>
+or run directly with
+```
+$ GITHUB_TOKEN=<your_github_token> cargo run <github_user_name>
 ```
 
 ## How To Generate A Github Access Token
@@ -51,10 +56,10 @@ Therefore, use iTerm2, Hyper, Warp or other terminals to display colors correctl
 ### `kusa --help`
 ```
 USAGE:
-    kusa <github user name>
+    kusa <github_user_name>
 
 ARGS:
-    <github user name>
+    <github_user_name>
 
 OPTIONS:
     -h, --help       Print help information
