@@ -6,7 +6,7 @@ use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuer
 use std::process;
 
 //////////////////////////////////////////////////////////
-static GITHUB_ACCESS_TOKEN: &str = "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";
+static GITHUB_ACCESS_TOKEN: &str = "GITHUB_ACCESS_TOKEN";
 //////////////////////////////////////////////////////////
 
 #[derive(GraphQLQuery)]
