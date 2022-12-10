@@ -38,7 +38,7 @@ Go to [github developer settings](https://github.com/settings/tokens).
 
 Set the expiration date to "No Expiration".
 
-No scopes are required for this application.
+Enable the scope "read:user" as it is required for this application.
 
 Click "Generate Token" and then copy the token it generates.
 
