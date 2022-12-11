@@ -21,8 +21,9 @@ or download the appropriate file for your device from [releases](https://github.
 
 ### Building From Source
 
-To build and run Kusa on your machine put your GitHub Personal Access Token with
-"read:user" enabled in "GITHUB_ACCESS_TOKEN" (src/main.rs, line 9)
+To build and run Kusa on your machine put your GitHub Personal Access Token as the
+"GITHUB_ACCESS_TOKEN" variable (src/main.rs, line 9), your token does not need any
+scopes.
 
 ```sh
 static GITHUB_ACCESS_TOKEN : &str = "GITHUB_ACCESS_TOKEN";
@@ -38,8 +39,6 @@ $ cargo run <github user name>
 Go to [github developer settings](https://github.com/settings/tokens).
 
 Set the expiration date to "No Expiration".
-
-Enable the scope "read:user" as it is required for this application.
 
 Click "Generate Token" and then copy the token it generates.
 
@@ -65,4 +64,5 @@ OPTIONS:
 ```
 
 ### `kusa Ryu0118`
+
 <img alt="image" src="https://user-images.githubusercontent.com/87907656/175245140-e01b8848-c5e7-4cdc-acf9-90aa2da703ed.png">
