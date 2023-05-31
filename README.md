@@ -1,7 +1,7 @@
 <div align="center">  
   <img alt="image" src="https://user-images.githubusercontent.com/87907656/174868343-f9ac7940-c49f-47fb-8f9d-a48ece0fc907.png">
   
-  #### Kusa is a simple CLI which displays GitHub contribution graphs right from the comfort of your shell
+  #### Kusa is a simple CLI tool that works on any platform and displays GitHub contribution graphs.
   
   ![Language:Rust](https://img.shields.io/static/v1?label=Language&message=Rust&color=green&style=flat-square)
   ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
