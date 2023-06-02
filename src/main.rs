@@ -62,7 +62,7 @@ impl HexToRGB for str {
     }
 }
 
-fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<DailyStatus>>) {
+fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, i64, i64, Vec<Vec<DailyStatus>>) {
     match response_data.user {
         Some(user) => {
             let contribution_calendar = user.contributions_collection.contribution_calendar;
@@ -83,7 +83,34 @@ fn get_github_contributions(response_data: kusa::ResponseData) -> (i64, Vec<Vec<
                         .collect()
                 })
                 .collect();
-            (total_contributions, weekly_status)
+
+            let mut current_streak = -1;
+            let mut max_streak = 0;
+
+            let mut streak = 0;
+            let mut first = true;
+
+            for week in contribution_calendar.weeks.iter().rev() {
+                for day in week.contribution_days.iter().rev() {
+                    if day.contribution_count == 0 {
+                        if current_streak == -1 && !first {
+                            current_streak = streak;
+                        }
+                        if streak > max_streak {
+                            max_streak = streak;
+                        }
+
+                        streak = 0;
+                    }
+                    else {
+                        streak += 1;
+                    }
+
+                    first = false;
+                }
+            }
+
+            (total_contributions, max_streak, current_streak, weekly_status)
         }
         None => {
             println!("No users found");
@@ -203,12 +230,14 @@ fn main() -> Result<()> {
     let args = Command::parse();
 
     let data = post_graphql_query(args.user_name)?;
-    let (total_contributions, weekly_statuses) = get_github_contributions(data);
+    let (total_contributions, max_streak, current_streak, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
     println!(
-        "{} contributions in the last year",
-        Style::new().bold().paint(total_contributions.to_string())
+        "{} contributions in the last year   Current streak: {}   Max streak: {}",
+        Style::new().bold().paint(total_contributions.to_string()),
+        current_streak,
+        max_streak
     );
 
     #[cfg(not(target_os = "windows"))]
