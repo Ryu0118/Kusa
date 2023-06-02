@@ -30,6 +30,9 @@ type Date = String;
 struct Command {
     #[clap(name = "github user name", action = clap::ArgAction::Set)]
     user_name: String,
+
+    #[clap(short = 's', long = "hide-streak", action = clap::ArgAction::SetTrue)]
+    hide_streak: bool
 }
 
 struct DailyStatus {
@@ -233,11 +236,17 @@ fn main() -> Result<()> {
     let (total_contributions, max_streak, current_streak, weekly_statuses) = get_github_contributions(data);
     let kusa = transpose(&weekly_statuses);
 
+    let streak_info =
+        if args.hide_streak {
+            "".to_string()
+        } else {
+            format!("   Current streak: {}   Max streak: {}", current_streak, max_streak)
+        };
+
     println!(
-        "{} contributions in the last year   Current streak: {}   Max streak: {}",
+        "{} contributions in the last year{}",
         Style::new().bold().paint(total_contributions.to_string()),
-        current_streak,
-        max_streak
+        streak_info
     );
 
     #[cfg(not(target_os = "windows"))]
