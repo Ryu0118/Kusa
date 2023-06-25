@@ -53,16 +53,17 @@ therefore, use iTerm2, Hyper, Warp or other terminals to display colors correctl
 
 ```
 USAGE:
-    kusa <github user name>
+    kusa [OPTIONS] <github user name>
 
 ARGS:
     <github user name>
 
 OPTIONS:
-    -h, --help       Print help information
-    -V, --version    Print version information
+    -h, --help           Print help information
+    -s, --hide-streak
+    -V, --version        Print version information
 ```
 
 ### `kusa Ryu0118`
 
-<img alt="image" src="https://user-images.githubusercontent.com/87907656/175245140-e01b8848-c5e7-4cdc-acf9-90aa2da703ed.png">
+<img alt="image" width="858" src="https://github.com/Ryu0118/Kusa/assets/87907656/a935a31e-d0b8-4e63-9d49-dfbefe6c84d5">
