@@ -14,12 +14,12 @@ release_mac_universal: $(SOURCE_FILE)
 	tar acvf release/$(APP)_$(VERSION)_mac_universal.tar.gz release/$(APP)
 
 release_linux: $(SOURCE_FILE)
-	$(CROSS_RELEASE_BUILD) aarch64-unknown-linux-musl
-	$(CROSS_RELEASE_BUILD) x86_64-unknown-linux-musl
-	cp ./target/aarch64-unknown-linux-musl/release/$(APP) $(APP)
+	$(CROSS_RELEASE_BUILD) aarch64-unknown-linux-gnu
+	$(CROSS_RELEASE_BUILD) x86_64-unknown-linux-gnu
+	cp ./target/aarch64-unknown-linux-gnu/release/$(APP) $(APP)
 	tar acvf release/$(APP)_$(VERSION)_aarch64_linux.tar.gz $(APP)
 	rm $(APP)
-	cp ./target/x86_64-unknown-linux-musl/release/$(APP) $(APP)
+	cp ./target/x86_64-unknown-linux-gnu/release/$(APP) $(APP)
 	tar acvf release/$(APP)_$(VERSION)_x86_64_linux.tar.gz $(APP)
 	rm $(APP)
 
